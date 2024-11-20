@@ -4,7 +4,10 @@ Console.ForegroundColor = ConsoleColor.Green;
 Console.WriteLine("************* Welcome to RecipeApp *************");
 Console.WriteLine("************* Create your recipe and save it *************");
 
-var recipeApp = new RecipeApp();
+var recipeApp = new RecipeApp(
+        new RecipesRepository(),
+        new RecipesConsoleUserInteractions()
+    );
 recipeApp.Run();
 
 
@@ -14,10 +17,10 @@ Console.ReadKey();
 
 public class RecipeApp
 {
-    private readonly RecipesRepository _recipesRepository;
+    private readonly IRecipesRepository _recipesRepository;
 
-    private readonly RecipesUserInteractions _recipesUserInteractions;
-    public RecipeApp(RecipesRepository recipesRepository, RecipesUserInteractions recipesUserInteractions)
+    private readonly IRecipesUserInteractions _recipesUserInteractions;
+    public RecipeApp(IRecipesRepository recipesRepository, IRecipesUserInteractions recipesUserInteractions)
     {
         _recipesRepository = recipesRepository;
         _recipesUserInteractions = recipesUserInteractions;
@@ -37,12 +40,19 @@ public class RecipeApp
         if(ingredients.Count > 0)
         {
             Recipe recipies = new (ingredients);
+            allRecipes.Add(recipies);
+            _recipesUserInteractions.Write(filePath, allRecipes);
+            _recipesUserInteractions.ShowMessage("Recipe has been saved");
+
+            
         }
         else
         {
             _recipesUserInteractions.ShowMessage("No ingredients have been selected" 
                 + "Recipe will not be saved");
         }
+
+        _recipesUserInteractions.Exit();
     }
 }
 
@@ -56,7 +66,13 @@ internal class Recipe
     }
 }
 
-public class RecipesRepository
+public interface IRecipesRepository
+{
+       string GetAllRecipes(string filePath);
+
+}
+
+public class RecipesRepository: IRecipesRepository
 {
 
     public string GetAllRecipes(string filePath)
@@ -65,20 +81,21 @@ public class RecipesRepository
     }
 }
 
-public class RecipesUserInteractions
+public interface IRecipesUserInteractions
 {
-    internal void PromptToCreateRecipe()
-    {
-        throw new NotImplementedException();
-    }
+    void ShowMessage(string message);
+    void Exit();
+}
 
-    internal object ReadIngredientsFromUser()
+public class RecipesConsoleUserInteractions : IRecipesUserInteractions
+{
+    public void ShowMessage(string message)
     {
-        throw new NotImplementedException();
+        Console.WriteLine(message);
     }
-
-    internal void ShowMessage(string v)
+    public void Exit()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("Press any key to exit application.");
+        Console.ReadKey();
     }
 }
