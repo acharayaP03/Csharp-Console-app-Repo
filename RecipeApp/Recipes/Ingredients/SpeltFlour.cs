@@ -1,9 +1,8 @@
-﻿namespace RecipeApp.Recipes.Ingredients
-{
-    public class SpeltFlour : Flour
-    {
-        public override int Id => 2;
+﻿namespace RecipeApp.Recipes.Ingredients;
 
-        public override string Name => "Spelt Flour";
-    }
+public class SpeltFlour : Flour
+{
+    public override int Id => 2;
+
+    public override string Name => "Spelt Flour";
 }

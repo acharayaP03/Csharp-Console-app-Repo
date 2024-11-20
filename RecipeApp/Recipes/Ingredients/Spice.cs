@@ -1,8 +1,7 @@
-﻿namespace RecipeApp.Recipes.Ingredients
+﻿namespace RecipeApp.Recipes.Ingredients;
+
+public abstract class Spice : Ingredient
 {
-    public abstract class Spice : Ingredient
-    {
-        public override string PreparationInstructions =>
-            $"Take half a teaspoon. {base.PreparationInstructions}";
-    }
+    public override string PreparationInstructions =>
+        $"Take half a teaspoon. {base.PreparationInstructions}";
 }

@@ -1,12 +1,10 @@
-﻿
-
-namespace RecipeApp.Recipes
+﻿namespace RecipeApp.Recipes
 {
     public class Recipe
     {
-        public IEnumerable<Ingredients> Ingredients { get; }
+        public IEnumerable<Ingredient> Ingredients { get; }
 
-        public Recipe(IEnumerable<Ingredients> ingredients)
+        public Recipe(IEnumerable<Ingredient> ingredients)
         {
             Ingredients = ingredients;
         }

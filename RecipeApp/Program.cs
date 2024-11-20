@@ -56,7 +56,7 @@ public class RecipeApp
     }
 }
 
-internal class Recipe
+public class Recipe
 {
     private object ingredients;
 

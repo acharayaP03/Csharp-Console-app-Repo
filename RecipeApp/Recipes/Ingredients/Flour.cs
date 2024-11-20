@@ -1,8 +1,7 @@
-﻿namespace RecipeApp.Recipes.Ingredients
+﻿namespace RecipeApp.Recipes.Ingredients;
+
+public abstract class Flour : Ingredient
 {
-    public abstract class Flour : Ingredient
-    {
-        public override string PreparationInstructions =>
-            $"Seive. {base.PreparationInstructions}";
-    }
+    public override string PreparationInstructions =>
+        $"Seive. {base.PreparationInstructions}";
 }

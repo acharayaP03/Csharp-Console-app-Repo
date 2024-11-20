@@ -1,9 +1,8 @@
-﻿namespace RecipeApp.Recipes.Ingredients
-{
-    public class Sugar : Ingredient
-    {
-        public override int Id => 5;
+﻿namespace RecipeApp.Recipes.Ingredients;
 
-        public override string Name => "Sugar";
-    }
+public class Sugar : Ingredient
+{
+    public override int Id => 5;
+
+    public override string Name => "Sugar";
 }
