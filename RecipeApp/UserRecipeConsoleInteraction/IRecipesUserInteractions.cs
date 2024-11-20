@@ -11,4 +11,5 @@ public interface IRecipesUserInteractions
 
     void ReadIngredientsFromUser();
     void Write(string filePath, List<Recipe> allRecipes);
+    void PrintExistingRecipes(IEnumerable<Recipe> allRecipes);
 }
