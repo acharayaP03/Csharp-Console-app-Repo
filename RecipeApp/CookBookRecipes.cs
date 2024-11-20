@@ -16,29 +16,29 @@ public class CookBookRecipes
 
 
 
-    public void Run()
+    public void Run(string filePath)
     {
-        string filePath = "recipes.txt";
-        var allRecipes = _recipesRepository.GetAllRecipes(filePath);
+        var allRecipes = _recipesRepository.Read(filePath);
+        _recipesUserInteractions.PrintExistingRecipes(allRecipes);
 
-        _recipesUserInteractions.PromptToCreateRecipe();
+        //_recipesUserInteractions.PromptToCreateRecipe();
 
-        var ingredients = _recipesUserInteractions.ReadIngredientsFromUser();
+        //var ingredients = _recipesUserInteractions.ReadIngredientsFromUser();
 
-        if (ingredients.Count > 0)
-        {
-            Recipe recipies = new(ingredients);
-            allRecipes.Add(recipies);
-            _recipesUserInteractions.Write(filePath, allRecipes);
-            _recipesUserInteractions.ShowMessage("Recipe has been saved");
+        //if (ingredients.Count() > 0)
+        //{
+        //    Recipe recipies = new(ingredients);
+        //    allRecipes.Add(recipies);
+        //    _recipesUserInteractions.Write(filePath, allRecipes);
+        //    _recipesUserInteractions.ShowMessage("Recipe has been saved");
 
 
-        }
-        else
-        {
-            _recipesUserInteractions.ShowMessage("No ingredients have been selected"
-                + "Recipe will not be saved");
-        }
+        //}
+        //else
+        //{
+        //    _recipesUserInteractions.ShowMessage("No ingredients have been selected"
+        //        + "Recipe will not be saved");
+        //}
 
         _recipesUserInteractions.Exit();
     }
