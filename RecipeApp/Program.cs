@@ -1,43 +1,21 @@
 ﻿
 
 using RecipeApp;
-using RecipeApp.Recipes;
-using RecipeApp.Recipes.Ingredients;
+using RecipeApp.Repositories;
 using RecipeApp.UserRecipeConsoleInteraction;
-
+using RecipeApp.Utils;
 
 RecipesConsoleUserInteractions.PrintApplicationStartingLabel();
+string projectDirectory = Environment.CurrentDirectory;
+string filePath = Path.Combine(projectDirectory, "recipe.txt");
 
 CookBookRecipes cookBookRecipes = new(
-        new RecipesRepository(),
+        new RecipesRepository(
+                new StringsTextualRepository(),
+                new IngredientsRegister()
+            ),
         new RecipesConsoleUserInteractions(
                 new IngredientsRegister()
             )
     );
-cookBookRecipes.Run("recipe.txt");
-
-
-public interface IRecipesRepository
-{
-       List<Recipe> Read(string filePath);
-
-}
-
-public class RecipesRepository: IRecipesRepository
-{
-
-    public List<Recipe> Read(string filePath)
-    {
-        return new List<Recipe>
-        {
-            new Recipe( new List<Ingredient>
-            {
-                new WheatFlour(),new Butter(),new Sugar()
-            }),
-            new Recipe(new List<Ingredient>
-            {
-                new CocoaPowder(), new SpeltFlour(),new Cinnamon()
-            })
-        };
-    }
-}
+cookBookRecipes.Run(filePath);

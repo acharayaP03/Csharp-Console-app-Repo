@@ -7,8 +7,8 @@ public class CookBookRecipes
 {
     private readonly IRecipesRepository _recipesRepository;
 
-    private readonly IRecipesUserInteractions _recipesUserInteractions;
-    public CookBookRecipes(IRecipesRepository recipesRepository, IRecipesUserInteractions recipesUserInteractions)
+    private readonly IRecipesConsoleUserInteractions _recipesUserInteractions;
+    public CookBookRecipes(IRecipesRepository recipesRepository, IRecipesConsoleUserInteractions recipesUserInteractions)
     {
         _recipesRepository = recipesRepository;
         _recipesUserInteractions = recipesUserInteractions;
@@ -29,7 +29,7 @@ public class CookBookRecipes
         {
             Recipe recipie = new(ingredients);
             allRecipes.Add(recipie);
-            //_recipesUserInteractions.Write(filePath, allRecipes);
+            _recipesRepository.Write(filePath, allRecipes);
             _recipesUserInteractions.ShowMessage("Recipe has been saved");
             _recipesUserInteractions.ShowMessage(recipie.ToString());
         }

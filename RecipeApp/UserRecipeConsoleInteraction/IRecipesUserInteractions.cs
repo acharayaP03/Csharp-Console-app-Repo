@@ -3,7 +3,7 @@ using RecipeApp.Recipes.Ingredients;
 
 namespace RecipeApp.UserRecipeConsoleInteraction;
 
-public interface IRecipesUserInteractions
+public interface IRecipesConsoleUserInteractions
 {
     void ShowMessage(string message);
     void Exit();
@@ -11,6 +11,6 @@ public interface IRecipesUserInteractions
     void PromptToCreateRecipe();
 
     IEnumerable<Ingredient> ReadIngredientsFromUser();
-    void Write(string filePath, List<Recipe> allRecipes);
+
     void PrintExistingRecipes(IEnumerable<Recipe> allRecipes);
 }
