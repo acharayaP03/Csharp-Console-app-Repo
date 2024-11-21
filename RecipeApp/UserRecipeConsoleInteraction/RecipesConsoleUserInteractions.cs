@@ -1,23 +1,23 @@
 ﻿using RecipeApp.Recipes;
+using RecipeApp.Recipes.Ingredients;
 
 namespace RecipeApp.UserRecipeConsoleInteraction;
 
 public class RecipesConsoleUserInteractions : IRecipesUserInteractions
 {
+
+    private readonly IngredientsRegister _ingredientsRegister;
+
+    public RecipesConsoleUserInteractions(IngredientsRegister ingredientsRegister)
+    {
+        _ingredientsRegister = ingredientsRegister;
+    }
+
     public void ShowMessage(string message)
     {
         Console.WriteLine(message);
     }
-    public void Exit()
-    {
-        Console.WriteLine("Press any key to exit application.");
-        Console.ReadKey();
-    }
 
-    public void PromptToCreateRecipe()
-    {
-        throw new NotImplementedException();
-    }
 
     public void ReadIngredientsFromUser()
     {
@@ -34,15 +34,76 @@ public class RecipesConsoleUserInteractions : IRecipesUserInteractions
         if (allRecipes.Count() > 0)
         {
             Console.WriteLine("Existing recipes are:" + Environment.NewLine);
+            Console.ForegroundColor = ConsoleColor.Cyan;
 
             var counter = 1;
             foreach (var recipe in allRecipes)
             {
-                Console.WriteLine($"************{counter}************");
+                Console.WriteLine($"************ {counter} ************");
                 Console.WriteLine(recipe);
                 Console.WriteLine();
                 ++counter;
             }
+
+            Console.ResetColor();
         }
     }
+
+    public void PromptToCreateRecipe()
+    {
+        Console.WriteLine("Create a new Recipe!"
+                + "Available ingredients are:"
+            );
+
+        foreach(var ingredient in _ingredientsRegister.All)
+        {
+            Console.WriteLine(ingredient);
+        }
+    }
+
+    public void Exit()
+    {
+        Console.WriteLine("Press any key to exit application.");
+        Console.ReadKey();
+    }
+
+    public static void PrintApplicationStartingLabel()
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("************* Welcome to RecipeApp *************");
+        Console.WriteLine("************* Create your recipe and save it *************");
+
+        Console.ResetColor();
+    }
+
+
+}
+
+
+public class IngredientsRegister
+{
+
+    //public IEnumerable<Ingredient> All { get; } = new List<Ingredient>
+    //{
+    //    new WheatFlour(),
+    //    new SpeltFlour(),
+    //    new Butter(),
+    //    new Chocolate(),
+    //    new Sugar(),
+    //    new Cardamom(),
+    //    new Cinnamon(),
+    //    new CocoaPowder()
+    //};
+
+    // new way of list
+    public IEnumerable<Ingredient> All { get; } = [
+        new WheatFlour(),
+        new SpeltFlour(),
+        new Butter(),
+        new Chocolate(),
+        new Sugar(),
+        new Cardamom(),
+        new Cinnamon(),
+        new CocoaPowder()
+    ];
 }

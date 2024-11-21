@@ -8,4 +8,8 @@ public abstract class Ingredient
 
     public virtual string PreparationInstructions =>
         "Add to other ingredients.";
+
+
+    public override string ToString() =>
+        $"{Id}). {Name}";
 }

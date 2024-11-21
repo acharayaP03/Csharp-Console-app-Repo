@@ -5,20 +5,17 @@ using RecipeApp.Recipes;
 using RecipeApp.Recipes.Ingredients;
 using RecipeApp.UserRecipeConsoleInteraction;
 
-Console.ForegroundColor = ConsoleColor.Green;
-Console.WriteLine("************* Welcome to RecipeApp *************");
-Console.WriteLine("************* Create your recipe and save it *************");
+
+RecipesConsoleUserInteractions.PrintApplicationStartingLabel();
 
 CookBookRecipes cookBookRecipes = new(
         new RecipesRepository(),
-        new RecipesConsoleUserInteractions()
+        new RecipesConsoleUserInteractions(
+                new IngredientsRegister()
+            )
     );
 cookBookRecipes.Run("recipe.txt");
 
-
-Console.WriteLine("Enter the recipe name: ");
-
-Console.ReadKey();
 
 public interface IRecipesRepository
 {

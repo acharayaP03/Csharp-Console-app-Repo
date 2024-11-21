@@ -21,7 +21,7 @@ public class CookBookRecipes
         var allRecipes = _recipesRepository.Read(filePath);
         _recipesUserInteractions.PrintExistingRecipes(allRecipes);
 
-        //_recipesUserInteractions.PromptToCreateRecipe();
+        _recipesUserInteractions.PromptToCreateRecipe();
 
         //var ingredients = _recipesUserInteractions.ReadIngredientsFromUser();
 
