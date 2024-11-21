@@ -1,9 +1,10 @@
 ﻿using RecipeApp.Recipes;
 using RecipeApp.Recipes.Ingredients;
+using RecipeApp.Repositories;
 
 namespace RecipeApp.UserRecipeConsoleInteraction;
 
-public class RecipesConsoleUserInteractions : IRecipesUserInteractions
+public class RecipesConsoleUserInteractions : IRecipesConsoleUserInteractions
 {
 
     private readonly IngredientsRegister _ingredientsRegister;
@@ -46,11 +47,6 @@ public class RecipesConsoleUserInteractions : IRecipesUserInteractions
             }
         }
         return ingredients;
-    }
-
-    public void Write(string filePath, List<Recipe> allRecipes)
-    {
-        throw new NotImplementedException();
     }
 
     public void PrintExistingRecipes(IEnumerable<Recipe> allRecipes)
@@ -101,46 +97,4 @@ public class RecipesConsoleUserInteractions : IRecipesUserInteractions
     }
 
 
-}
-
-
-public class IngredientsRegister
-{
-
-    //public IEnumerable<Ingredient> All { get; } = new List<Ingredient>
-    //{
-    //    new WheatFlour(),
-    //    new SpeltFlour(),
-    //    new Butter(),
-    //    new Chocolate(),
-    //    new Sugar(),
-    //    new Cardamom(),
-    //    new Cinnamon(),
-    //    new CocoaPowder()
-    //};
-
-    // new way of list
-    public IEnumerable<Ingredient> All { get; } = [
-        new WheatFlour(),
-        new SpeltFlour(),
-        new Butter(),
-        new Chocolate(),
-        new Sugar(),
-        new Cardamom(),
-        new Cinnamon(),
-        new CocoaPowder()
-    ];
-
-    public Ingredient GetById(int id)
-    {
-        foreach(var ingredient in All)
-        {
-            if(ingredient.Id == id)
-            {
-                return ingredient;
-            }
-        }
-
-        return null;
-    }
 }
