@@ -23,22 +23,21 @@ public class CookBookRecipes
 
         _recipesUserInteractions.PromptToCreateRecipe();
 
-        //var ingredients = _recipesUserInteractions.ReadIngredientsFromUser();
+        var ingredients = _recipesUserInteractions.ReadIngredientsFromUser();
 
-        //if (ingredients.Count() > 0)
-        //{
-        //    Recipe recipies = new(ingredients);
-        //    allRecipes.Add(recipies);
-        //    _recipesUserInteractions.Write(filePath, allRecipes);
-        //    _recipesUserInteractions.ShowMessage("Recipe has been saved");
-
-
-        //}
-        //else
-        //{
-        //    _recipesUserInteractions.ShowMessage("No ingredients have been selected"
-        //        + "Recipe will not be saved");
-        //}
+        if (ingredients.Count() > 0)
+        {
+            Recipe recipie = new(ingredients);
+            allRecipes.Add(recipie);
+            //_recipesUserInteractions.Write(filePath, allRecipes);
+            _recipesUserInteractions.ShowMessage("Recipe has been saved");
+            _recipesUserInteractions.ShowMessage(recipie.ToString());
+        }
+        else
+        {
+            _recipesUserInteractions.ShowMessage("No ingredients have been selected"
+                + "Recipe will not be saved");
+        }
 
         _recipesUserInteractions.Exit();
     }
