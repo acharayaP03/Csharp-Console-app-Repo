@@ -1,4 +1,5 @@
 ﻿using RecipeApp.Recipes;
+using RecipeApp.Recipes.Ingredients;
 using RecipeApp.Repositories;
 using RecipeApp.Utils;
 
@@ -44,11 +45,11 @@ public class RecipesRepository: IRecipesRepository
     private Recipe ReadFromString(string recipeFromFileRead)
     {
         var idsFromFile = recipeFromFileRead.Split(Separator);
-        var ingredients = new List<Recipe>();
+        var ingredients = new List<Ingredient>();
 
-        foreach(var id in idsFromFile)
+        foreach(var idFromFile in idsFromFile)
         {
-            var id = int.Parse(idsFromFile);
+            var id = int.Parse(idFromFile);
             var ingredient = _ingredientsRegister.GetById(id);
 
             ingredients.Add(ingredient);
