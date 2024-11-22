@@ -1,6 +1,6 @@
 ﻿namespace RecipeApp.Utils;
 
-public class StringsTextualRepository : IStringsTextualRepository
+public class StringsTextualRepository : IStringsRepository
 {
     private static readonly string Separator = Environment.NewLine;
 
