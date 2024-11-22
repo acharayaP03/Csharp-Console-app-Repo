@@ -9,13 +9,15 @@ RecipesConsoleUserInteractions.PrintApplicationStartingLabel();
 string projectDirectory = Environment.CurrentDirectory;
 string filePath = Path.Combine(projectDirectory, "recipe.txt");
 
+IngredientsRegister ingredientsRegister = new();
+
 CookBookRecipes cookBookRecipes = new(
         new RecipesRepository(
                 new StringsTextualRepository(),
-                new IngredientsRegister()
+                ingredientsRegister
             ),
         new RecipesConsoleUserInteractions(
-                new IngredientsRegister()
+                ingredientsRegister
             )
     );
 cookBookRecipes.Run(filePath);
