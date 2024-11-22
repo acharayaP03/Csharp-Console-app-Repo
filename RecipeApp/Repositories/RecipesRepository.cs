@@ -5,14 +5,14 @@ using RecipeApp.Utils;
 
 public class RecipesRepository: IRecipesRepository
 {
-    private readonly IStringsTextualRepository _stringsTextualRepository;
+    private readonly IStringsRepository _stringsRepository;
 
     private readonly IIngredientsRegister _ingredientsRegister;
 
     private const string Separator = ",";
-    public RecipesRepository(IStringsTextualRepository stringsTextualRepository, IIngredientsRegister ingredientsRegister)
+    public RecipesRepository(IStringsRepository stringsRepository, IIngredientsRegister ingredientsRegister)
     {
-        _stringsTextualRepository = stringsTextualRepository;
+        _stringsRepository = stringsRepository;
         _ingredientsRegister = ingredientsRegister;
     }
 
@@ -30,7 +30,7 @@ public class RecipesRepository: IRecipesRepository
         //    })
         //};
 
-        List<string> recipesFromFile = _stringsTextualRepository.Read(filePath);
+        List<string> recipesFromFile = _stringsRepository.Read(filePath);
 
         var recipes = new List<Recipe>();
         foreach(var recipeFromFileRead in recipesFromFile)
@@ -71,6 +71,6 @@ public class RecipesRepository: IRecipesRepository
             }
             recipesAsStrings.Add(string.Join(Separator, allIds));
         }
-        _stringsTextualRepository.Write(filePath, recipesAsStrings);
+        _stringsRepository.Write(filePath, recipesAsStrings);
     }
 }
