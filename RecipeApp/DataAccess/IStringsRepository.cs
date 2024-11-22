@@ -1,4 +1,4 @@
-﻿namespace RecipeApp.Utils;
+﻿namespace RecipeApp.DataAccess;
 
 public interface IStringsRepository
 {
