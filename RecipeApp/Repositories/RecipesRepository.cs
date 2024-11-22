@@ -1,7 +1,7 @@
-﻿using RecipeApp.Recipes;
+﻿using RecipeApp.DataAccess;
+using RecipeApp.Recipes;
 using RecipeApp.Recipes.Ingredients;
 using RecipeApp.Repositories;
-using RecipeApp.Utils;
 
 public class RecipesRepository: IRecipesRepository
 {
@@ -18,18 +18,6 @@ public class RecipesRepository: IRecipesRepository
 
     public List<Recipe> Read(string filePath)
     {
-        //return new List<Recipe>
-        //{
-        //    new Recipe( new List<Ingredient>
-        //    {
-        //        new WheatFlour(),new Butter(),new Sugar()
-        //    }),
-        //    new Recipe(new List<Ingredient>
-        //    {
-        //        new CocoaPowder(), new SpeltFlour(),new Cinnamon()
-        //    })
-        //};
-
         List<string> recipesFromFile = _stringsRepository.Read(filePath);
 
         var recipes = new List<Recipe>();
