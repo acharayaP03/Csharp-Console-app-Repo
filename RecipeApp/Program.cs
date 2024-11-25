@@ -6,31 +6,46 @@ using RecipeApp.Repositories;
 using RecipeApp.UserRecipeConsoleInteraction;
 using RecipeApp.Utils;
 
-RecipesConsoleUserInteractions.PrintApplicationStartingLabel();
 
-const FileFormat Format = FileFormat.Json;
+//Applying global Exception handler
+try
+{
 
-IStringsRepository userSelctedRepository = Format == FileFormat.Json
-    ? new StringsJsonRepository() : new StringsTextualRepository();
+    RecipesConsoleUserInteractions.PrintApplicationStartingLabel();
 
-const string FileName = "recipes";
+    IngredientsRegister ingredientsRegister = new();
+    const FileFormat Format = FileFormat.Json;
 
-var fileMetadata = new FileMetadata(FileName,
-    Format);
+    IStringsRepository userSelctedRepository = Format == FileFormat.Json
+        ? new StringsJsonRepository() : new StringsTextualRepository();
 
-IngredientsRegister ingredientsRegister = new();
+    const string FileName = "recipes";
 
+    var fileMetadata = new FileMetadata(FileName,
+        Format);
 
-CookBookRecipes cookBookRecipes = new(
-        new RecipesRepository(
-                userSelctedRepository,
-                ingredientsRegister
-            ),
-        new RecipesConsoleUserInteractions(
-                ingredientsRegister
-            )
-    );
-cookBookRecipes.Run(fileMetadata.ToPath());
+    CookBookRecipes cookBookRecipes = new(
+            new RecipesRepository(
+                    userSelctedRepository,
+                    ingredientsRegister
+                ),
+            new RecipesConsoleUserInteractions(
+                    ingredientsRegister
+                )
+        );
+    cookBookRecipes.Run(fileMetadata.ToPath());
+} 
+catch(Exception ex)
+{
+    Console.WriteLine("Sorry! The application experienced" +
+        " an unexpected error and will have to be closed." +
+        "The error message: " + ex.Message
+        );
+
+    Console.WriteLine("Please press any key to exit out of app.");
+    Console.ReadKey();
+}
+
 
 
 
