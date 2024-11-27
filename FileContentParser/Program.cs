@@ -1,58 +1,91 @@
 ﻿
-
-using Microsoft.VisualBasic;
+using FileContentParser;
 using System.Text.Json;
+FileDataParserApp app = new();
+var errorLogger = new ErrorLogger("errorLog.txt");
 
-var isFileRead = false;
-//string contents = default; // in the case if we do not know the default type,
-//we can use default. if the type is defined before variable is initialized, just assign defalut or else below
-var contents = default(string);
-do
+try
 {
-    try
-    {
-        UserConsoleInteraction.PrintApplicationStartingLabel(
-        "File formatter",
-        "Type in your file location to format file."
-        );
 
-        var fileName = Console.ReadLine();
-        contents = File.ReadAllText(fileName);
-        isFileRead = true;
-
-    }
-    catch (ArgumentNullException ex)
-    {
-        Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted. file name is null.");
-    }
-    catch (ArgumentException ex)
-    {
-        Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted.");
-    }
-    catch (FileNotFoundException ex)
-    {
-        Console.WriteLine("Sorry!, Filename could not be found..");
-    }
-} while (!isFileRead);
-
-
-var formatedContents = JsonSerializer.Deserialize<List<FileContents>>(contents);
-if (formatedContents.Count > 0)
-{
-    Console.WriteLine();
-    Console.WriteLine("File read contents are:");
-    foreach (var fileContent in formatedContents)
-    {
-        Console.WriteLine(fileContent);
-    }
+app.RunApp();
 }
+catch(Exception ex)
+{
+    Console.WriteLine($"Sorry, The application has experienced an unexpected error " +
+        "and will have to be closed.");
 
-
-
+    errorLogger.Log(ex);
+}
 
 
 Console.ReadKey();
 
+public class FileDataParserApp
+{
+    public void RunApp()
+    {
+        var isFileRead = false;
+        //string contents = default; // in the case if we do not know the default type,
+        //we can use default. if the type is defined before variable is initialized, just assign defalut or else below
+        var contents = default(string);
+        var fileName = default(string);
+        do
+        {
+            try
+            {
+                UserConsoleInteraction.PrintApplicationStartingLabel(
+                "File formatter",
+                "Type in your file location to format file."
+                );
+
+                fileName = Console.ReadLine();
+                contents = File.ReadAllText(fileName);
+                isFileRead = true;
+
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted. file name is null.");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted.");
+            }
+            catch (FileNotFoundException ex)
+            {
+                Console.WriteLine("Sorry!, Filename could not be found..");
+            }
+        } while (!isFileRead);
+
+        List<FileContents> formatedContents = default;
+        try
+        {
+            formatedContents = JsonSerializer.Deserialize<List<FileContents>>(contents);
+
+        }
+        catch (JsonException ex)
+        {
+            var originalColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"JSON on {fileName} file was not in a valid format. JSON body.");
+            Console.WriteLine(contents);
+
+            Console.ForegroundColor = originalColor;
+
+            throw new JsonException($"{ex.Message}, The file that caused this issue is: {fileName}", ex);
+        }
+
+        if (formatedContents.Count > 0)
+        {
+            Console.WriteLine();
+            Console.WriteLine("File read contents are:");
+            foreach (var fileContent in formatedContents)
+            {
+                Console.WriteLine(fileContent);
+            }
+        }
+    }
+}
 
 public class UserConsoleInteraction
 {
@@ -62,7 +95,6 @@ public class UserConsoleInteraction
         Console.WriteLine($"************* Welcome to {applicationLabel} *************");
         Console.ResetColor();
         Console.WriteLine($"{applicationSubtitle}");
-
     }
 }
 
@@ -71,7 +103,6 @@ public class FileContents
     public string Title { get; set; }
     public int ReleaseYear { get; set; }
     public decimal Rating { get; set; }
-
 
     public override string ToString()
     {
