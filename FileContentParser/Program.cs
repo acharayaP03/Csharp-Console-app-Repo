@@ -31,30 +31,39 @@ public class FileDataParserApp
         var fileName = default(string);
         do
         {
-            try
-            {
+
                 UserConsoleInteraction.PrintApplicationStartingLabel(
                 "File formatter",
                 "Type in your file location to format file."
                 );
 
                 fileName = Console.ReadLine();
-                contents = File.ReadAllText(fileName);
-                isFileRead = true;
 
-            }
-            catch (ArgumentNullException ex)
+            if(fileName is null)
             {
                 Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted. file name is null.");
             }
-            catch (ArgumentException ex)
+            else if(fileName == string.Empty)
             {
                 Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted.");
             }
-            catch (FileNotFoundException ex)
+            else if(!File.Exists(fileName))
             {
                 Console.WriteLine("Sorry!, Filename could not be found..");
             }
+            else
+            {
+
+                contents = File.ReadAllText(fileName);
+                isFileRead = true;
+            }
+
+
+    
+            
+      
+            
+            
         } while (!isFileRead);
 
         List<FileContents> formatedContents = default;
