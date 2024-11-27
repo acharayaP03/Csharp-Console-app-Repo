@@ -1,4 +1,4 @@
-﻿namespace FileContentParser;
+﻿namespace FileContentParser.Logger;
 
 public class ErrorLogger
 {
