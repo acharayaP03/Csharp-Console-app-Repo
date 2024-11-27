@@ -7,9 +7,9 @@ var errorLogger = new ErrorLogger("errorLog.txt");
 try
 {
 
-app.RunApp();
+    app.RunApp();
 }
-catch(Exception ex)
+catch (Exception ex)
 {
     Console.WriteLine($"Sorry, The application has experienced an unexpected error " +
         "and will have to be closed.");
@@ -24,53 +24,32 @@ public class FileDataParserApp
 {
     public void RunApp()
     {
-        var isFileRead = false;
-        //string contents = default; // in the case if we do not know the default type,
-        //we can use default. if the type is defined before variable is initialized, just assign defalut or else below
-        var contents = default(string);
-        var fileName = default(string);
-        do
+        string? fileName = ReadValidFilePathFromUser();
+
+        var contents = File.ReadAllText(fileName);
+        List<FileContents> formatedContents = DeserializeFileContents(fileName, contents);
+
+        PrintFileContents(formatedContents);
+    }
+
+    private static void PrintFileContents(List<FileContents> formatedContents)
+    {
+        if (formatedContents.Count > 0)
         {
-
-                UserConsoleInteraction.PrintApplicationStartingLabel(
-                "File formatter",
-                "Type in your file location to format file."
-                );
-
-                fileName = Console.ReadLine();
-
-            if(fileName is null)
+            Console.WriteLine();
+            Console.WriteLine("File read contents are:");
+            foreach (var fileContent in formatedContents)
             {
-                Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted. file name is null.");
+                Console.WriteLine(fileContent);
             }
-            else if(fileName == string.Empty)
-            {
-                Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted.");
-            }
-            else if(!File.Exists(fileName))
-            {
-                Console.WriteLine("Sorry!, Filename could not be found..");
-            }
-            else
-            {
+        }
+    }
 
-                contents = File.ReadAllText(fileName);
-                isFileRead = true;
-            }
-
-
-    
-            
-      
-            
-            
-        } while (!isFileRead);
-
-        List<FileContents> formatedContents = default;
+    private static List<FileContents> DeserializeFileContents(string? fileName, string contents)
+    {
         try
         {
-            formatedContents = JsonSerializer.Deserialize<List<FileContents>>(contents);
-
+            return JsonSerializer.Deserialize<List<FileContents>>(contents);
         }
         catch (JsonException ex)
         {
@@ -83,16 +62,42 @@ public class FileDataParserApp
 
             throw new JsonException($"{ex.Message}, The file that caused this issue is: {fileName}", ex);
         }
+    }
 
-        if (formatedContents.Count > 0)
+    private static string? ReadValidFilePathFromUser()
+    {
+        var isFilePathValid = false;
+        //string contents = default; // in the case if we do not know the default type,
+        //we can use default. if the type is defined before variable is initialized, just assign defalut or else below
+        var fileName = default(string);
+        do
         {
-            Console.WriteLine();
-            Console.WriteLine("File read contents are:");
-            foreach (var fileContent in formatedContents)
+
+            UserConsoleInteraction.PrintApplicationStartingLabel(
+            "File formatter",
+            "Type in your file location to format file."
+            );
+
+            fileName = Console.ReadLine();
+
+            if (fileName is null)
             {
-                Console.WriteLine(fileContent);
+                Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted. file name is null.");
             }
-        }
+            else if (fileName == string.Empty)
+            {
+                Console.WriteLine("Sorry!, Filename cannot be empty. please provide file name to be formatted.");
+            }
+            else if (!File.Exists(fileName))
+            {
+                Console.WriteLine("Sorry!, Filename could not be found..");
+            }
+            else
+            {
+                isFilePathValid = true;
+            }
+        } while (!isFilePathValid);
+        return fileName;
     }
 }
 
