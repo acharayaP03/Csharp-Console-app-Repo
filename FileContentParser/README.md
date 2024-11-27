@@ -14,3 +14,7 @@ Valid File
 
 Invalid file
 ![image](https://github.com/user-attachments/assets/115aaa5c-f68c-41c7-898e-72c277f6ab62)
+
+Error log 
+
+![image](https://github.com/user-attachments/assets/ba21e274-a739-4e55-a641-a7c81e66a3e5)
