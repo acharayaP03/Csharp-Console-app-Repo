@@ -51,6 +51,75 @@ finally
     Console.WriteLine("Cleaning up all operation");
 }
 
+
+// Exception filtering with "when"
+try
+{
+    var dataFromWeb = ExceptionFiltering.SendHttpRequest("www.someAddress.com/get/someResource");
+}
+catch (HttpRequestException ex) when (ex.Message == "403")
+{
+    Console.WriteLine($"It was forbidden to access the resource");
+    throw;
+}
+catch (HttpRequestException ex) when (ex.Message == "404")
+{
+    Console.WriteLine("The resource was not found.");
+    throw;
+}
+
+
+try
+{
+    var transaction = new TransactionData
+    {
+        Sender = "Alice",
+        Receiver = "Bob",
+        Amount = 100m
+    };
+
+    throw new InvalidTransactionException("Negative transaction amount is not allowed.", transaction);
+}
+catch (InvalidTransactionException ex)
+{
+    Console.WriteLine($"Error: {ex.Message}");
+    Console.WriteLine($"Transaction Details: Sender = {ex.TransactionData.Sender}, Receiver = {ex.TransactionData.Receiver}, Amount = {ex.TransactionData.Amount}");
+}
+
+
+
 Console.ReadKey();
 
 
+public class InvalidTransactionException : Exception
+{
+    public TransactionData TransactionData { get; }
+
+    public InvalidTransactionException()
+    {
+    }
+
+    public InvalidTransactionException(string message) : base(message)
+    {
+    }
+
+    public InvalidTransactionException(string message, Exception innerException) : base(message, innerException)
+    { }
+
+    public InvalidTransactionException(string message, TransactionData transactionData) : base(message)
+    {
+        TransactionData = transactionData;
+    }
+
+    public InvalidTransactionException(string message, TransactionData transactionData, Exception innerException) : base(message, innerException)
+    {
+        TransactionData = transactionData;
+    }
+}
+
+    public class TransactionData
+    {
+        public string Sender { get; init; }
+        public string Receiver { get; init; }
+        public decimal Amount { get; init; }
+    }
