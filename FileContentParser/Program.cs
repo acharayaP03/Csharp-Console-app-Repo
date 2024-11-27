@@ -7,6 +7,7 @@ var isFileRead = false;
 //string contents = default; // in the case if we do not know the default type,
 //we can use default. if the type is defined before variable is initialized, just assign defalut or else below
 var contents = default(string);
+var fileName = default(string);
 do
 {
     try
@@ -16,7 +17,7 @@ do
         "Type in your file location to format file."
         );
 
-        var fileName = Console.ReadLine();
+        fileName = Console.ReadLine();
         contents = File.ReadAllText(fileName);
         isFileRead = true;
 
@@ -35,8 +36,23 @@ do
     }
 } while (!isFileRead);
 
+List<FileContents> formatedContents = default;
+try
+{
+    formatedContents = JsonSerializer.Deserialize<List<FileContents>>(contents);
 
-var formatedContents = JsonSerializer.Deserialize<List<FileContents>>(contents);
+} catch(JsonException ex)
+{
+    var originalColor = Console.ForegroundColor;
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.WriteLine($"JSON on {fileName} file was not "
+        + $"in a valid format. JSON body.");
+    Console.WriteLine(contents);
+    Console.ForegroundColor = originalColor;
+
+    throw new JsonException($"{ex.Message}, The file that caused this issue is: {fileName}", ex);
+}
+
 if (formatedContents.Count > 0)
 {
     Console.WriteLine();
@@ -46,10 +62,6 @@ if (formatedContents.Count > 0)
         Console.WriteLine(fileContent);
     }
 }
-
-
-
-
 
 Console.ReadKey();
 
@@ -62,7 +74,6 @@ public class UserConsoleInteraction
         Console.WriteLine($"************* Welcome to {applicationLabel} *************");
         Console.ResetColor();
         Console.WriteLine($"{applicationSubtitle}");
-
     }
 }
 
@@ -71,7 +82,6 @@ public class FileContents
     public string Title { get; set; }
     public int ReleaseYear { get; set; }
     public decimal Rating { get; set; }
-
 
     public override string ToString()
     {
