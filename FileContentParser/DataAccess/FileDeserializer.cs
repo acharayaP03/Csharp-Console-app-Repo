@@ -13,11 +13,11 @@ public class FileDeserializer : IFileDeserializer
         _userConsoleInteraction = userConsoleInteraction;
     }
 
-    public List<FileContents> DeserializeFileContents(string? fileName, string contents)
+    public IEnumerable<FileContents> DeserializeFileContents(string? fileName, string contents)
     {
         try
         {
-            return JsonSerializer.Deserialize<List<FileContents>>(contents);
+            return JsonSerializer.Deserialize<IEnumerable<FileContents>>(contents);
         }
         catch (JsonException ex)
         {

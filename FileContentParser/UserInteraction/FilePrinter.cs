@@ -11,9 +11,9 @@ public class FilePrinter : IFilePrinter
         _userConsoleInteraction = userConsoleInteraction;
     }
 
-    public void Print(List<FileContents> formatedContents)
+    public void Print(IEnumerable<FileContents> formatedContents)
     {
-        if (formatedContents.Count > 0)
+        if (formatedContents.Count() > 0)
         {
             _userConsoleInteraction.PrintMessage(Environment.NewLine + "File read contents are:");
             foreach (var fileContent in formatedContents)

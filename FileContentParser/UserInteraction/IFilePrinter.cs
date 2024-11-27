@@ -4,5 +4,5 @@ namespace FileContentParser.UserInteraction;
 
 public interface IFilePrinter
 {
-    void Print(List<FileContents> formatedContents);
+    void Print(IEnumerable<FileContents> formatedContents);
 }
