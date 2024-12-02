@@ -1,4 +1,6 @@
-﻿Console.WriteLine("************* Strategic design pattern *************");
+﻿using StrategicDesignPattren;
+
+Console.WriteLine("************* Strategic design pattern *************");
 Console.WriteLine("Avaialbel numbers are below: " + Environment.NewLine);
 
 var numbers = new List<int>
@@ -24,7 +26,8 @@ void PrintAvailableNumbers(IEnumerable<int> numbers)
     Console.ResetColor();
 }
 
-List<int> result = new NumbersFilter().FilterBy(userInput, numbers);
+var filteringStrategy = new FilteringStrategySelector().Select(userInput);
+List<int> result = new NumbersFilter().FilterBy(filteringStrategy, numbers);
 PrintAvailableNumbers(result);
 
 Console.ReadKey();
