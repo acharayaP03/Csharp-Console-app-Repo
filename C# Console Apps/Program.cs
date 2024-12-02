@@ -1,125 +1,162 @@
-﻿using C__Console_Apps.ExceptionHendeling;
-using C__Console_Apps.VitualMethodsOverriding;
-using Microsoft.VisualBasic;
+﻿using C__Console_Apps.AdvamcedMethods;
+using C__Console_Apps.ExceptionHendeling;
 
 Console.WriteLine("This Project consist of bundle of C# console applications.");
 
-//Chedder chedder = new();
-//var ingredients = new List<Ingredients> { chedder, new Mozzarella(), new Parmesan() };
+var test = new SimpleCustomList<int>();
+test.Add(1);
+test.Add(2);
+test.Add(3);
+test.Add(4);
+test.Add(5);
 
 
-//foreach (var ingredient in ingredients)
-//{
-//    Console.WriteLine(ingredient.Name);
-//}
+// generic method
+var ints = new List<int> { 1, 2, 3, 4 };
+var decimals = new List<decimal> { 1.2m, 1.5m,2.4m,6.2m};
+var unOrderedList = new List<int> { 2, 4, 3, 8, 9, 16 };
+var str = new List<string> { "KKK", "hhhh", "aaaa" };
 
-//var numbers = new List<int> { 1, 2, 3, -4, 5, 6, 7, -8, 9, 10 , 44, -32, 56, -19};
-//bool shouldOnlyAddPositiveNumbers = false;   
+ints.AddToFront(1);
+var convertedInts = decimals.ConvertTo<int,decimal>();
+Console.WriteLine(convertedInts[1]);
+Console.WriteLine(convertedInts[1]);
 
-//var calculator = shouldOnlyAddPositiveNumbers ? new AddOnlyPositiveNumbers() : new NumbersSumCalculator();
 
-//var sum = calculator.CalculateSum(numbers);
+PrintInOrder(10, 5);
+PrintInOrder("4444", "aaaa");
 
-//int seasonNumber = 3;
+Console.WriteLine("Islarger than 10: " + AdvMethodsPredicateAndLabmdaExpression.IsAny(unOrderedList, number => number > 0));
 
-//Season winter = (Season)seasonNumber; // explicit casting
+// lambda expression (params => expression)
+Console.WriteLine("IEven with labmda expresion : " + AdvMethodsPredicateAndLabmdaExpression.IsAny(unOrderedList, number => number % 2 == 0)); // lambda expression
+Console.WriteLine("IEven : " + AdvMethodsPredicateAndLabmdaExpression.IsAny(unOrderedList, AdvMethodsPredicateAndLabmdaExpression.IsEven)); // lambda expression
 
-//Console.WriteLine($"Sum of the numbers is {sum}");
 
-string input = Console.ReadLine();
-try
+//Type constraints
+
+IEnumerable<T> CreateCollectionOfRandomLength<T>(
+    int maxLength) where T : new()
 {
-    int number = ExplicitException.ParseStringToInt(input);
-    var result = 10 / number;
-    Console.WriteLine("String successfully parsed, the result is " + number);
-    Console.WriteLine($"10 / {number} is " + result);
-}
-catch (FormatException ex)
-{
-    Console.WriteLine("Wrong format provided " + ex.Message);
-}
-catch (DivideByZeroException ex)
-{
-    Console.WriteLine("Cannot be divided by 0. " + ex.Message);
-}
-catch (Exception ex)
-{
-    Console.WriteLine("An exception occurred. " + ex.Message);
-}
-finally
-{
-    Console.WriteLine("Cleaning up all operation");
-}
+    var length = new Random().Next(maxLength + 1);
 
+    var result = new List<T>(length);
 
-// Exception filtering with "when"
-try
-{
-    var dataFromWeb = ExceptionFiltering.SendHttpRequest("www.someAddress.com/get/someResource");
-}
-catch (HttpRequestException ex) when (ex.Message == "403")
-{
-    Console.WriteLine($"It was forbidden to access the resource");
-    throw;
-}
-catch (HttpRequestException ex) when (ex.Message == "404")
-{
-    Console.WriteLine("The resource was not found.");
-    throw;
-}
-
-
-try
-{
-    var transaction = new TransactionData
+    for (int i = 0; i < length; ++i)
     {
-        Sender = "Alice",
-        Receiver = "Bob",
-        Amount = 100m
-    };
+        result.Add(new T());
+    }
 
-    throw new InvalidTransactionException("Negative transaction amount is not allowed.", transaction);
+    return result;
 }
-catch (InvalidTransactionException ex)
+void PrintInOrder<T>(T first, T second) where T : IComparable<T>
 {
-    Console.WriteLine($"Error: {ex.Message}");
-    Console.WriteLine($"Transaction Details: Sender = {ex.TransactionData.Sender}, Receiver = {ex.TransactionData.Receiver}, Amount = {ex.TransactionData.Amount}");
+
 }
 
 
+var employees = new List<Employee>
+{
+    new Employee("Jake Smith", "Space Navigation", 25000),
+    new Employee("Anna Blake", "Space Navigation", 29000),
+    new Employee("Barbara Oak", "Xenobiology", 21500 ),
+    new Employee("Damien Parker", "Xenobiology", 22000),
+    new Employee("Nisha Patel", "Machanics", 21000),
+    new Employee("Gustavo Sanchez", "Machanics", 20000),
+};
+
+var result = CalculateAverageSalaryPerDepartment(employees);
+
+Dictionary<string, decimal> CalculateAverageSalaryPerDepartment(
+    IEnumerable<Employee> employees)
+{
+    var employeesPerDepartments = new Dictionary<string, List<Employee>>();
+
+    foreach (var employee in employees)
+    {
+        if (!employeesPerDepartments.ContainsKey(employee.Department))
+        {
+            employeesPerDepartments[employee.Department] = new List<Employee>();
+        }
+
+        employeesPerDepartments[employee.Department].Add(employee);
+    }
+
+    var result = new Dictionary<string, decimal>();
+
+    foreach (var employeesPerDepartment in employeesPerDepartments)
+    {
+        decimal sumOfSalaries = 0;
+
+        foreach (var employee in employeesPerDepartment.Value)
+        {
+            sumOfSalaries += employee.Salary;
+        }
+
+        var average = sumOfSalaries / employeesPerDepartment.Value.Count;
+
+        result[employeesPerDepartment.Key] = average;
+    }
+
+    return result;
+}
 
 Console.ReadKey();
 
 
-public class InvalidTransactionException : Exception
+public static class TupleSwap
 {
-    public TransactionData TransactionData { get; }
+    public static Tuple<TSecond, TFirst> SwapTupleItem<TFirst, TSecond>(Tuple<TFirst, TSecond> tuple)
+            => new Tuple<TSecond, TFirst>(tuple.Item2, tuple.Item1);
+}
 
-    public InvalidTransactionException()
+
+
+
+public class Employee
+{
+    public string Name { get; init; }
+    public string Department {  get; init; }
+    public decimal Salary { get; init; }
+
+    public Employee(string name, string department, decimal salary)
     {
-    }
-
-    public InvalidTransactionException(string message) : base(message)
-    {
-    }
-
-    public InvalidTransactionException(string message, Exception innerException) : base(message, innerException)
-    { }
-
-    public InvalidTransactionException(string message, TransactionData transactionData) : base(message)
-    {
-        TransactionData = transactionData;
-    }
-
-    public InvalidTransactionException(string message, TransactionData transactionData, Exception innerException) : base(message, innerException)
-    {
-        TransactionData = transactionData;
+        Name = name;
+        Department = department;
+        Salary = salary;
     }
 }
 
-    public class TransactionData
+public static class Exercise
+{
+    public static Dictionary<PetType, double> FindMaxWeights(List<Pet> pets)
     {
-        public string Sender { get; init; }
-        public string Receiver { get; init; }
-        public decimal Amount { get; init; }
+        var result = new Dictionary<PetType, double>();
+
+        foreach (var pet in pets)
+        {
+            if (result.ContainsKey(pet.PetType) || pet.Weight > result[pet.PetType])
+            {
+                result[pet.PetType] = pet.Weight;
+            }
+        }
+
+        return result;
     }
+}
+
+public class Pet
+{
+    public PetType PetType { get; }
+    public double Weight { get; }
+
+    public Pet(PetType petType, double weight)
+    {
+        PetType = petType;
+        Weight = weight;
+    }
+
+    public override string ToString() => $"{PetType}, {Weight} kilos";
+}
+
+public enum PetType { Dog, Cat, Fish }
