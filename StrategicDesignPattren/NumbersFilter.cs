@@ -1,20 +1,10 @@
 ﻿namespace StrategicDesignPattren;
 
-
-/// <summary>
-/// Defines the <see cref="NumbersFilter" />
-/// </summary>
-public class NumbersFilter
+public class Filter
 {
-    /// <summary>
-    /// The FilterBy
-    /// </summary>
-    /// <param name="filteringType">The filteringType<see cref="string"/></param>
-    /// <param name="numbers">The numbers<see cref="List{int}"/></param>
-    /// <returns>The <see cref="List{int}"/></returns>
-    public List<int> FilterBy(Func<int, bool> predicate, List<int> numbers)
+    public IEnumerable<T> FilterBy<T>(Func<T, bool> predicate, IEnumerable<T> numbers)
     {
-        var result = new List<int>();
+        var result = new List<T>();
         foreach (var number in numbers)
         {
             if (predicate(number))

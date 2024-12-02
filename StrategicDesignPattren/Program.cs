@@ -28,7 +28,16 @@ void PrintAvailableNumbers(IEnumerable<int> numbers)
 }
 
 var filteringStrategy = filteringStrategySelector.Select(userInput);
-List<int> result = new NumbersFilter().FilterBy(filteringStrategy, numbers);
+var result = new Filter().FilterBy(filteringStrategy, numbers);
 PrintAvailableNumbers(result);
+
+
+//Now we can pass the list containing string
+var words = new[] { "zebra", "ostrich", "otter" };
+var oWords = new Filter().FilterBy(
+        word => word.StartsWith("o"), words
+    );
+
+Console.WriteLine($"Words starts with o are {string.Join(", ", oWords)}");
 
 Console.ReadKey();
