@@ -1,85 +1,4 @@
 ﻿
-
-
-
-
-
-
-//switch (userInput.ToLower())
-//{
-//    case "even":
-//        result = SelectEven(numbers);
-//        break;
-//    case "odd":
-//        result = SelectOdd(numbers);
-//        break;
-//    case "positive":
-//        result = SelectPositive(numbers);
-//        break;
-//    case "negative":
-//        result = SelectNegative(numbers);
-//        break;
-//    default:
-//        throw new NotSupportedException(
-//            $"{userInput} is not a valid filter");
-//}
-
-//List<int> SelectEven(List<int> numbers)
-//{
-//    var result = new List<int>();
-//    foreach (var number in numbers)
-//    {
-//        if (number % 2 == 0)
-//        {
-//            result.Add(number);
-//        }
-//    }
-
-//    return result;
-//}
-
-//List<int> SelectOdd(List<int> numbers)
-//{
-//    var result = new List<int>();
-//    foreach (var number in numbers)
-//    {
-//        if (number % 2 != 0)
-//        {
-//            result.Add(number);
-//        }
-//    }
-
-//    return result;
-//}
-
-//List<int> SelectPositive(List<int> numbers)
-//{
-//    var result = new List<int>();
-//    foreach (var number in numbers)
-//    {
-//        if (number > 0)
-//        {
-//            result.Add(number);
-//        }
-//    }
-
-//    return result;
-//}
-
-//List<int> SelectNegative(List<int> numbers)
-//{
-//    var result = new List<int>();
-//    foreach (var number in numbers)
-//    {
-//        if (number < 0)
-//        {
-//            result.Add(number);
-//        }
-//    }
-
-//    return result;
-//}
-
 /// <summary>
 /// Defines the <see cref="NumbersFilter" />
 /// </summary>
@@ -96,68 +15,25 @@ public class NumbersFilter
         switch (filteringType.ToLower())
         {
             case "even":
-                return SelectEven(numbers);
+                return Select(numbers, number => number % 2 == 0);
             case "odd":
-                return SelectOdd(numbers);
+                return Select(numbers, number => number % 2 is not 0);
             case "positive":
-                return SelectPositive(numbers);
-
+                return Select(numbers, number => number > 0);
             case "negative":
-                return SelectNegative(numbers);
+                return Select(numbers, number => number < 0);
             default:
                 throw new NotSupportedException(
                     $"{filteringType} is not a valid filter");
         }
     }
 
-    private List<int> SelectEven(List<int> numbers)
+    public List<int> Select(List<int> numbers, Func<int, bool> predicate)
     {
         var result = new List<int>();
         foreach (var number in numbers)
         {
-            if (number % 2 == 0)
-            {
-                result.Add(number);
-            }
-        }
-
-        return result;
-    }
-
-    private List<int> SelectOdd(List<int> numbers)
-    {
-        var result = new List<int>();
-        foreach (var number in numbers)
-        {
-            if (number % 2 != 0)
-            {
-                result.Add(number);
-            }
-        }
-
-        return result;
-    }
-
-    private List<int> SelectPositive(List<int> numbers)
-    {
-        var result = new List<int>();
-        foreach (var number in numbers)
-        {
-            if (number > 0)
-            {
-                result.Add(number);
-            }
-        }
-
-        return result;
-    }
-
-    private List<int> SelectNegative(List<int> numbers)
-    {
-        var result = new List<int>();
-        foreach (var number in numbers)
-        {
-            if (number < 0)
+            if(predicate(number))
             {
                 result.Add(number);
             }
