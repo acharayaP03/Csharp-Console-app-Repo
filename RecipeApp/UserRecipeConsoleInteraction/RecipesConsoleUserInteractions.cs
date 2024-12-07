@@ -56,14 +56,12 @@ public class RecipesConsoleUserInteractions : IRecipesConsoleUserInteractions
             Console.WriteLine("Existing recipes are:" + Environment.NewLine);
             Console.ForegroundColor = ConsoleColor.Cyan;
 
-            var counter = 1;
-            foreach (var recipe in allRecipes)
-            {
-                Console.WriteLine($"************ {counter} ************");
-                Console.WriteLine(recipe);
-                Console.WriteLine();
-                ++counter;
-            }
+            allRecipes.Select((recipe, index) =>
+                   $"************ {index + 1} ************" + Environment.NewLine + recipe +
+                   Environment.NewLine
+               )
+                   .ToList()
+                   .ForEach(Console.WriteLine);
 
             Console.ResetColor();
         }

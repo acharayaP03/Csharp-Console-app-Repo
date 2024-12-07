@@ -1,5 +1,6 @@
 ﻿using C__Console_Apps.AdvamcedMethods;
-using C__Console_Apps.ExceptionHendeling;
+using C__Console_Apps.Constraint;
+using C__Console_Apps.Linqs;
 
 Console.WriteLine("This Project consist of bundle of C# console applications.");
 
@@ -9,6 +10,7 @@ test.Add(2);
 test.Add(3);
 test.Add(4);
 test.Add(5);
+
 
 
 // generic method
@@ -23,36 +25,14 @@ Console.WriteLine(convertedInts[1]);
 Console.WriteLine(convertedInts[1]);
 
 
-PrintInOrder(10, 5);
-PrintInOrder("4444", "aaaa");
+new CreateCollection().PrintInOrder(10, 5);
+new CreateCollection().PrintInOrder("4444", "aaaa");
 
 Console.WriteLine("Islarger than 10: " + AdvMethodsPredicateAndLabmdaExpression.IsAny(unOrderedList, number => number > 0));
 
 // lambda expression (params => expression)
 Console.WriteLine("IEven with labmda expresion : " + AdvMethodsPredicateAndLabmdaExpression.IsAny(unOrderedList, number => number % 2 == 0)); // lambda expression
 Console.WriteLine("IEven : " + AdvMethodsPredicateAndLabmdaExpression.IsAny(unOrderedList, AdvMethodsPredicateAndLabmdaExpression.IsEven)); // lambda expression
-
-
-//Type constraints
-
-IEnumerable<T> CreateCollectionOfRandomLength<T>(
-    int maxLength) where T : new()
-{
-    var length = new Random().Next(maxLength + 1);
-
-    var result = new List<T>(length);
-
-    for (int i = 0; i < length; ++i)
-    {
-        result.Add(new T());
-    }
-
-    return result;
-}
-void PrintInOrder<T>(T first, T second) where T : IComparable<T>
-{
-
-}
 
 
 var employees = new List<Employee>
@@ -65,98 +45,75 @@ var employees = new List<Employee>
     new Employee("Gustavo Sanchez", "Machanics", 20000),
 };
 
-var result = CalculateAverageSalaryPerDepartment(employees);
+var result = new CalculateAverageSalary().CalculateAverageSalaryPerDepartment(employees);
 
-Dictionary<string, decimal> CalculateAverageSalaryPerDepartment(
-    IEnumerable<Employee> employees)
+// Annonymous type
+var listsOfNumbers = new List<List<int>>
 {
-    var employeesPerDepartments = new Dictionary<string, List<Employee>>();
+    new List<int> { 15,68,20,12,19,8,55},
+    new List<int> { 12,1,3,4,-19,8,7,6},
+    new List<int> { 5,-6,-2,-12,-10,7}
+};
 
-    foreach (var employee in employees)
-    {
-        if (!employeesPerDepartments.ContainsKey(employee.Department))
-        {
-            employeesPerDepartments[employee.Department] = new List<Employee>();
-        }
+// new {} initializes an object with anonymous type Count and Average
+// off course this is possible if we are not planning to user those propeties in other places. 
+// new { Count = ..., Average = ... }  
+// it creates gettale properties only and can only be used to carry temporary data like in here.
+var anonymousTypesResult = listsOfNumbers.Select(listOfNumber => new
+{
+    Count = listOfNumber.Count(),
+    Average = listOfNumber.Average(),
+})
+    .OrderByDescending(countAndAverage => countAndAverage.Average)
+    .Select(countAndAverage =>
 
-        employeesPerDepartments[employee.Department].Add(employee);
-    }
+        $"Count is: {countAndAverage.Count}, " +
+        $"Average is: {countAndAverage.Average}"
+    );
 
-    var result = new Dictionary<string, decimal>();
+Console.WriteLine(string.Join(Environment.NewLine, anonymousTypesResult));
 
-    foreach (var employeesPerDepartment in employeesPerDepartments)
-    {
-        decimal sumOfSalaries = 0;
+//ref and out 
+int someInteger = 5;
 
-        foreach (var employee in employeesPerDepartment.Value)
-        {
-            sumOfSalaries += employee.Salary;
-        }
-
-        var average = sumOfSalaries / employeesPerDepartment.Value.Count;
-
-        result[employeesPerDepartment.Key] = average;
-    }
-
-    return result;
+void AddOneToNumber(ref int number)
+{
+    ++number;
 }
+
+void MethodWithOutParameter(out int number)
+{
+    number = 10;
+}
+
+AddOneToNumber(ref someInteger);
+MethodWithOutParameter(out int otherNumber);
+Console.WriteLine($"{someInteger}, is changed since we pass it as ref");
+Console.WriteLine($"{otherNumber}, is changed since we pass it as out");
+
+
+/**
+ * Boxing: happens implicityly each time when we assign a value type to an instance of reference type.
+ * in other words, it is a process of wrapping a value type into an intance of System.Object, which is a refrence type.
+ * it is necessary, so we can ue all tyes in C# in a uniform was as object.
+ * for example variousObject has all type 
+ * 
+ * Unboxing: is converting the boxed value back to the value type.
+ * 
+ * */
+int number = 5; // value type
+object boxedNumber = number; // reference type
+
+int unboxedNumber = (int)boxedNumber; // unboxing
+
+var variousObjects = new List<object>
+{
+    1,
+    1.5m,
+    new DateTime(2024,6,1),
+    "hello",
+    new { Name = "Anna", Age = 61 },
+};
+
 
 Console.ReadKey();
-
-
-public static class TupleSwap
-{
-    public static Tuple<TSecond, TFirst> SwapTupleItem<TFirst, TSecond>(Tuple<TFirst, TSecond> tuple)
-            => new Tuple<TSecond, TFirst>(tuple.Item2, tuple.Item1);
-}
-
-
-
-
-public class Employee
-{
-    public string Name { get; init; }
-    public string Department {  get; init; }
-    public decimal Salary { get; init; }
-
-    public Employee(string name, string department, decimal salary)
-    {
-        Name = name;
-        Department = department;
-        Salary = salary;
-    }
-}
-
-public static class Exercise
-{
-    public static Dictionary<PetType, double> FindMaxWeights(List<Pet> pets)
-    {
-        var result = new Dictionary<PetType, double>();
-
-        foreach (var pet in pets)
-        {
-            if (result.ContainsKey(pet.PetType) || pet.Weight > result[pet.PetType])
-            {
-                result[pet.PetType] = pet.Weight;
-            }
-        }
-
-        return result;
-    }
-}
-
-public class Pet
-{
-    public PetType PetType { get; }
-    public double Weight { get; }
-
-    public Pet(PetType petType, double weight)
-    {
-        PetType = petType;
-        Weight = weight;
-    }
-
-    public override string ToString() => $"{PetType}, {Weight} kilos";
-}
-
-public enum PetType { Dog, Cat, Fish }
