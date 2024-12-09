@@ -1,4 +1,5 @@
 ﻿using C__Console_Apps.AdvamcedMethods;
+using C__Console_Apps.Attributes;
 using C__Console_Apps.Constraint;
 using C__Console_Apps.Linqs;
 
@@ -91,29 +92,86 @@ MethodWithOutParameter(out int otherNumber);
 Console.WriteLine($"{someInteger}, is changed since we pass it as ref");
 Console.WriteLine($"{otherNumber}, is changed since we pass it as out");
 
-
-/**
- * Boxing: happens implicityly each time when we assign a value type to an instance of reference type.
- * in other words, it is a process of wrapping a value type into an intance of System.Object, which is a refrence type.
- * it is necessary, so we can ue all tyes in C# in a uniform was as object.
- * for example variousObject has all type 
- * 
- * Unboxing: is converting the boxed value back to the value type.
- * 
- * */
-int number = 5; // value type
-object boxedNumber = number; // reference type
-
-int unboxedNumber = (int)boxedNumber; // unboxing
-
-var variousObjects = new List<object>
-{
-    1,
-    1.5m,
-    new DateTime(2024,6,1),
-    "hello",
-    new { Name = "Anna", Age = 61 },
-};
+//using var reader = new AllLinesFromTextFileReader("filePath.txt");
 
 
+var converter = new ObjectToTextConverter();
+Console.WriteLine(converter.Convert(new House("123 John street", 170.6, 2)));
+
+var validPerson = new Person("Tristen", 1984);
+var validator = new Validator();
+var invalidPerson = new Person("t", 19);
+
+Console.WriteLine(validator.Validate(validPerson) ? "Yup he is trishten" : "nope....");
+Console.WriteLine(validator.Validate(invalidPerson) ? "Yes this is valid as well": "nope, not valid...");
+
+
+// non destructive mutation on struct
+// only possibe to mutate by "with" id the setter in "init"
+var point = new Point(10, 12);
+var mutatedPoint = point with { X = 11, Y = 22 };
 Console.ReadKey();
+
+
+public record House(string Address, double Area, int Floors);
+
+public class Person
+{
+    [StringLengthValidate(2,25)]
+    public string Name { get; }
+
+    public int YearOfBirth { get; }
+
+    public Person(string name, int yearOfBirth)
+    {
+        Name = name;
+        YearOfBirth = yearOfBirth;
+    }
+
+    public Person(string name ) => Name = name;
+}
+
+struct Point
+{
+    public int X { get; init; }
+    public int Y { get; init; }
+
+
+    public Point(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+
+    public override string ToString()
+    {
+        return $"X: {X}, Y: {Y}";
+    }
+}
+
+public struct Time
+{
+    public int Hour { get; }
+
+    public int Minutes { get; }
+
+    public Time(int hour, int minutes)
+    {
+        if (hour < 0 || hour > 23)
+        {
+            throw new ArgumentOutOfRangeException("Hour is out of range of 0-23");
+        }
+
+        if (minutes < 0 || minutes > 59)
+        {
+            throw new ArgumentOutOfRangeException("Minute is out of range of 0-59");
+        }
+        Hour = hour;
+        Minutes = minutes;
+    }
+
+    public override string ToString() => $"{Hour:00}:{Minutes:00}";
+
+    public string Describe() => $"{Hour.ToString("00")}:{Minutes.ToString("00")}";
+
+}
