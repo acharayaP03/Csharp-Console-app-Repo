@@ -110,6 +110,13 @@ Console.WriteLine(validator.Validate(invalidPerson) ? "Yes this is valid as well
 // only possibe to mutate by "with" id the setter in "init"
 var point = new Point(10, 12);
 var mutatedPoint = point with { X = 11, Y = 22 };
+
+
+// preprocessor directive to supress warning
+#nullable disable
+string text = null;
+
+
 Console.ReadKey();
 
 
@@ -131,47 +138,5 @@ public class Person
     public Person(string name ) => Name = name;
 }
 
-struct Point
-{
-    public int X { get; init; }
-    public int Y { get; init; }
 
 
-    public Point(int x, int y)
-    {
-        X = x;
-        Y = y;
-    }
-
-    public override string ToString()
-    {
-        return $"X: {X}, Y: {Y}";
-    }
-}
-
-public struct Time
-{
-    public int Hour { get; }
-
-    public int Minutes { get; }
-
-    public Time(int hour, int minutes)
-    {
-        if (hour < 0 || hour > 23)
-        {
-            throw new ArgumentOutOfRangeException("Hour is out of range of 0-23");
-        }
-
-        if (minutes < 0 || minutes > 59)
-        {
-            throw new ArgumentOutOfRangeException("Minute is out of range of 0-59");
-        }
-        Hour = hour;
-        Minutes = minutes;
-    }
-
-    public override string ToString() => $"{Hour:00}:{Minutes:00}";
-
-    public string Describe() => $"{Hour.ToString("00")}:{Minutes.ToString("00")}";
-
-}

@@ -66,4 +66,17 @@ public class Exercise
 {
     public Func<string, int> GetLength = str => str.Length;
     public Func<int> GetRandomNumberBetween1And10 = () => new Random().Next(1, 11);
+
+    //public void TestMethod()
+    //{
+    //    Func<int, bool> someMethod1 = Method1;
+    //    Func<DateTime> someMethod2 = Method2;
+    //    Action<string, string> someMethod3 = Method3;
+    //}
+
+    //public double Method1(int a, bool b) => 0;
+    //public DateTime Method2() => default(DateTime);
+    //public void Method3(string a, string b) { }
 }
+
+
