@@ -1,5 +1,7 @@
 ﻿
 using System.Collections;
+using Newtonsoft.Json;
+
 
 Console.WriteLine("Advanced Collections");
 
@@ -11,6 +13,10 @@ var parameterLessCustomCollection = new CustomCollection
 {
     "aaa", "bbb", "cccc"
 };
+
+var json = JsonConvert.SerializeObject(customCollection);
+
+Console.WriteLine(json);
 
 
 // under the hood this is how the foreach loop works
@@ -70,7 +76,15 @@ public class CustomCollection : IEnumerable<string>
 
     public IEnumerator<string> GetEnumerator()
     {
-        return new WordsEnumerator(Words);
+        //return new WordsEnumerator(Words);
+        //foreach(var word in Words)
+        //{
+        //    yield return word;
+        //}
+
+        // or 
+        IEnumerable<string> words = Words;
+        return words.GetEnumerator();
     }
 
     public string this[int index]

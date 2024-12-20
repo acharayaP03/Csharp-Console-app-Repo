@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Folders that do not need to be versioned
+AdvanceCollections
+ANeedForYeild/
+BigONotation/
+CSharpConsoleApps/
+Events/
+UnitTesting/
+WpfApp1/
+StringsAndChars/
+UtilitiesTests/
