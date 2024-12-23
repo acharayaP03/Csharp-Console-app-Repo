@@ -363,7 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Folders that do not need to be versioned
-AdvanceCollections
+AdvanceCollections/
 ANeedForYeild/
 BigONotation/
 CSharpConsoleApps/
@@ -372,3 +372,7 @@ UnitTesting/
 WpfApp1/
 StringsAndChars/
 UtilitiesTests/
+RefactoringInAction/
+AsyncAndAwait/
+AsynchornousTask/
+AsyncAndMultiThreading/
